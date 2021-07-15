@@ -15,39 +15,46 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-5 ps-5 pe-5">
+
                 <div class="input-group">
                     <input type="search" class="form-control rounded" placeholder="Enter a city" autocomplete="off"
                            autofocus>
+
                     <div class="justify-content-md-end">
                         <button class="btn btn-primary ms-4 me-md-1" id="btn-search" type="button">Search</button>
                         <button class="btn btn-primary" type="button" id="btn-current">Current</button>
                     </div>
+
                 </div>
 
             </div>
             <div class="weather-info mt-4 ps-5">
-                <h1 class="city">
-                    Dublin, IE
-                </h1>
-                <ul class="p-0">
-                    <li>Thu, 15 Jul ⏰ 15:00</li>
-                    <li>Few Clouds</li>
-                    <li><i class="fas fa-arrow-circle-up"></i> Day 24° <i class="fas fa-arrow-circle-down"></i> Night
-                        22°</li>
-                </ul>
                 <div class="row">
-                    <div class="col-6">
-                        <img src="images/cloudy.png" class="float-start weather-icon pe-2" alt="weather icon">
-                        <h2 id="temperature">23<span id="units">°C | °F</span></h2>
-
+                    <div class="col">
+                        <h1 class="city">
+                            Dublin, IE
+                        </h1>
+                        <ul class="p-0">
+                            <li>Thu, 15 Jul ⏰ 15:00</li>
+                            <li>Few Clouds</li>
+                            <li><i class="fas fa-arrow-circle-up"></i> Day 24° <i class="fas fa-arrow-circle-down"></i>
+                                Night
+                                22°
+                            </li>
+                        </ul>
                     </div>
-
-                    <div class="col-6">
-                        <ul>
-                            <li>Humidity: <strong>71%</strong></li>
-                            <li>Pressure: <strong>1025hPa</strong></li>
-                            <li>Visibility: <strong>10km</strong></li>
-                            <li>Feels like <strong>23°</strong></li>
+                    <div class="col">
+                        <img src="images/cloudy.png" class="float-start weather-icon pe-2" alt="weather icon">
+                        <h2 id="temperature">23<span id="units">°C|°F</span></h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3 pe-5">
+                        <ul class="list-group list-group-horizontal">
+                            <li class="list-group-item">Humidity: <strong>71%</strong></li>
+                            <li class="list-group-item">Pressure: <strong>1025hPa</strong></li>
+                            <li class="list-group-item">Visibility: <strong>10km</strong></li>
+                            <li class="list-group-item">Feels like: <strong>23°</strong></li>
                         </ul>
                     </div>
                 </div>

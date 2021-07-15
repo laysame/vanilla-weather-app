@@ -42,7 +42,7 @@ strong {
 }
 
 .city, #temperature {
-    color: #272142;
+    color: #4fa5c2;
     font-size: 3em;
     margin-bottom: 0;
 }
@@ -65,4 +65,9 @@ strong {
     top: -22px;
     font-size: 0.5em;
     font-weight: bold;
+}
+
+.list-group-item {
+    border: 1px solid #4fa5c2;
+    height: 60px;
 }
