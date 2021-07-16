@@ -7,7 +7,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    font-size: 0.8rem;
+    font-size:0.9em;
 
 }
 
@@ -77,12 +77,11 @@ strong {
     background-color: #4fa5c2;
     color: #f9fbfc;
     border: 1px solid #4fa5c2;
-    transition: 100ms ease-in-out;
+    transition: 200ms ease-in-out;
 }
 
 .list-group-item {
     border: 1px solid #4fa5c2;
-    height: 9vh;
     text-align: center;
     margin: 0 auto;
     display: block;

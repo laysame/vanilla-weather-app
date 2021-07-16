@@ -45,6 +45,7 @@ function displayTemperature(response) {
     let currentMaxTemperature = Math.round(response.data.main.temp_max);
     let currentMinTemperature = Math.round(response.data.main.temp_min);
     const dateTimeElement = document.querySelector("#date-time");
+    const iconElement = document.querySelector("#icon");
     // Applying Timezone
     let utcTime = new Date();
     let localTime = new Date(utcTime.getTime() + response.data.timezone * 1000);
@@ -59,6 +60,8 @@ function displayTemperature(response) {
     windElement.innerHTML = `<strong>${currentWind}km/H</strong>`;
     maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
     Night ${currentMinTemperature}°`;
+    iconElement.setAttribute("src", `https://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`); //Changing attribute "src" to another value
+    iconElement.setAttribute("alt", response.data.weather[0].description);
 }
 
 function updateCity(cityName) {
@@ -80,8 +83,8 @@ function handlePosition (position) {
     axios.get(url).then(displayTemperature);
 }
 
-function currentPosition (event) {
-    event.preventDefault();
+function currentPosition (position) {
+    position.preventDefault();
     navigator.geolocation.getCurrentPosition(handlePosition);
 }
 
