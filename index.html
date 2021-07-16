@@ -15,9 +15,9 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-5 ps-5 pe-5">
-                <form>
+                <form id="input-form">
                     <div class="input-group">
-                        <input type="search" class="form-control rounded" placeholder="Enter a city" autocomplete="off"
+                        <input type="search" class="form-control rounded" id="input-search" placeholder="Enter a city" autocomplete="off"
                                autofocus>
 
                         <div class="justify-content-md-end">
@@ -30,16 +30,11 @@
             <div class="weather-info mt-4 ps-5">
                 <div class="row">
                     <div class="col">
-                        <h1 class="city">
-                            Dublin, IE
-                        </h1>
+                        <h1 id="city"></h1>
                         <ul class="p-0">
                             <li>Thu, 15 Jul <i class="far fa-clock" style="color: #4fa5c2"></i> 15:00</li>
-                            <li>Few Clouds</li>
-                            <li><i class="fas fa-arrow-circle-up"></i> Day 24° <i class="fas fa-arrow-circle-down"></i>
-                                Night
-                                22°
-                            </li>
+                            <li id="weather-description"></li>
+                            <li id="high-low-temp"></li>
                         </ul>
                         <div class="btn-group pb-3" role="group">
                             <button type="button" class="btn btn-primary unit">°C</button>
@@ -48,16 +43,16 @@
                     </div>
                     <div class="col">
                         <img src="images/cloudy.png" class="float-start weather-icon pe-2" alt="weather icon">
-                        <h2 id="temperature">23°</h2>
+                        <h2 id="temperature"></h2>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col mb-3 pe-5">
                         <ul class="list-group list-group-horizontal">
-                            <li class="list-group-item"><i class="fas fa-water"></i> Humidity <strong>71%</strong></li>
-                            <li class="list-group-item"><i class="fas fa-compress-alt"></i> Pressure <strong>1025hPa</strong></li>
-                            <li class="list-group-item"><i class="far fa-lightbulb"></i> Visibility <strong>10km</strong></li>
-                            <li class="list-group-item"><i class="fas fa-temperature-low"></i> Feels like <strong>23°</strong></li>
+                            <li class="list-group-item" id="humidity"></li>
+                            <li class="list-group-item" id="pressure"></li>
+                            <li class="list-group-item" id="visibility"></li>
+                            <li class="list-group-item" id="feels-like"></li>
                         </ul>
                     </div>
                 </div>
@@ -66,6 +61,6 @@
         </div>
     </div>
 
-    <script src="src/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

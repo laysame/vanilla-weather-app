@@ -12,7 +12,7 @@ body {
 
 .wrapper {
     font-family: 'Poppins', sans-serif;
-    border: 3px solid;
+    border: 2px solid;
     border-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3ClinearGradient id='g' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23cffffe' /%3E%3Cstop offset='25%25' stop-color='%23f9f7d9' /%3E%3Cstop offset='50%25' stop-color='%23fce2ce' /%3E%3Cstop offset='100%25' stop-color='%23ffc1f3' /%3E%3C/linearGradient%3E %3Cpath d='M1.5 1.5 l97 0l0 97l-97 0 l0 -97' stroke-linecap='square' stroke='url(%23g)' stroke-width='3'/%3E %3C/svg%3E") 1;
     margin: 0 auto;
     max-width: 600px;
@@ -22,6 +22,7 @@ li {
     list-style: none;
     padding: 0;
     margin: 0;
+    text-transform: capitalize;
 }
 
 i {
@@ -45,7 +46,7 @@ strong {
     line-height: 1;
 }
 
-.city, #temperature {
+#city, #temperature {
     color: #4fa5c2;
     font-size: 3em;
     margin-bottom: 0;
@@ -64,7 +65,7 @@ strong {
     color: #f9fbfc;
 }
 
-.unit {
+.unit, .unit:focus{
     background-color: #f587ac;
     border: 1px solid #4fa5c2;
 }
@@ -73,7 +74,7 @@ strong {
     background-color: #4fa5c2;
     color: #f9fbfc;
     border: 1px solid #4fa5c2;
-    transition: 400ms ease-in-out;
+    transition: 100ms ease-in-out;
 }
 
 .list-group-item {
