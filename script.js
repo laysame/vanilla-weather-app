@@ -1,7 +1,6 @@
 'use strict';
 const apiKey = "718938e8a3e4822470de1037fd72347a";
 let unit = "metric";
-let cityName = "pisa";
 
 //functions
 function formatDate(date) {
@@ -22,10 +21,9 @@ function formatDate(date) {
     ];
     let currentMonth = months[date.getUTCMonth()];
 
-    return `${currentDay}, ${currentDate} ${currentMonth} <i class="far fa-clock" style="color: #4fa5c2"></i> ${hours}:${minutes}`;
+    return `${currentDay}, ${currentDate} ${currentMonth} <i class="far fa-clock"></i> ${hours}:${minutes}`;
 }
 
-//
 function displayTemperature(response) {
     console.log(response.data)
     const cityElement = document.querySelector("#city");
@@ -55,13 +53,33 @@ function displayTemperature(response) {
     cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
     temperatureElement.innerHTML = `${currentTemperature}°`;
     DescriptionElement.innerHTML = currentDescription;
-    humidityElement.innerHTML = `<i class="fas fa-water"></i> Humidity <strong>${currentHumidity}%</strong>`;
-    visibilityElement.innerHTML = `<i class="far fa-lightbulb"></i> Visibility <strong> ${currentVisibility}km </strong>`;
-    feelsLikeElement.innerHTML = `<i class="fas fa-temperature-low"></i> Feels like <strong>${currentFeelsLike}°</strong>`;
-    windElement.innerHTML = `<i class="fas fa-wind"></i> Wind <strong>${currentWind}km/H</strong>`;
+    humidityElement.innerHTML = `<strong>${currentHumidity}%</strong>`;
+    visibilityElement.innerHTML = `<strong> ${currentVisibility}km </strong>`;
+    feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
+    windElement.innerHTML = `<strong>${currentWind}km/H</strong>`;
     maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
     Night ${currentMinTemperature}°`;
 }
 
-const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
-axios.get(apiUrl).then(displayTemperature);
+function updateCity(cityName) {
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
+    axios.get(apiUrl).then(displayTemperature);
+}
+
+function handleSubmit(event) {
+    event.preventDefault();
+    const searchInput = inputSearchElement.value.trim();
+    updateCity(searchInput);
+
+    console.log(searchInput)
+}
+
+
+const inputFormElement = document.querySelector("#input-form");
+const inputSearchElement = document.querySelector("#input-search");
+const buttonSearch = document.querySelector("#btn-search");
+
+inputFormElement.addEventListener("submit", handleSubmit);
+buttonSearch.addEventListener("click", handleSubmit);
+
+updateCity("london");
