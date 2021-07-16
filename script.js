@@ -73,13 +73,26 @@ function handleSubmit(event) {
 
     console.log(searchInput)
 }
+function handlePosition (position) {
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
+    axios.get(url).then(displayTemperature);
+}
 
+function currentPosition (event) {
+    event.preventDefault();
+    navigator.geolocation.getCurrentPosition(handlePosition);
+}
 
 const inputFormElement = document.querySelector("#input-form");
 const inputSearchElement = document.querySelector("#input-search");
 const buttonSearch = document.querySelector("#btn-search");
+const buttonCurrent = document.querySelector("#btn-current");
 
 inputFormElement.addEventListener("submit", handleSubmit);
 buttonSearch.addEventListener("click", handleSubmit);
+buttonCurrent.addEventListener("click", currentPosition);
 
 updateCity("london");
+currentPosition();
