@@ -7,7 +7,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 .wrapper {
@@ -26,6 +26,10 @@ li {
 
 i {
     color: #f587ac;
+}
+
+i:hover {
+    color: #4fa5c2;
 }
 
 img {
@@ -74,5 +78,8 @@ strong {
 
 .list-group-item {
     border: 1px solid #4fa5c2;
-    height: 60px;
+    height: 9vh;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
 }
