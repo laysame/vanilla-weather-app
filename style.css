@@ -60,11 +60,16 @@ strong {
     color: #f9fbfc;
 }
 
-#units {
-    position: relative;
-    top: -22px;
-    font-size: 0.5em;
-    font-weight: bold;
+.unit {
+    background-color: #f587ac;
+    border: 1px solid #4fa5c2;
+}
+
+.unit:hover {
+    background-color: #4fa5c2;
+    color: #f9fbfc;
+    border: 1px solid #4fa5c2;
+    transition: 400ms ease-in-out;
 }
 
 .list-group-item {

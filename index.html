@@ -15,18 +15,17 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-5 ps-5 pe-5">
+                <form>
+                    <div class="input-group">
+                        <input type="search" class="form-control rounded" placeholder="Enter a city" autocomplete="off"
+                               autofocus>
 
-                <div class="input-group">
-                    <input type="search" class="form-control rounded" placeholder="Enter a city" autocomplete="off"
-                           autofocus>
-
-                    <div class="justify-content-md-end">
-                        <button class="btn btn-primary ms-4 me-md-1" id="btn-search" type="button">Search</button>
-                        <button class="btn btn-primary" type="button" id="btn-current">Current</button>
+                        <div class="justify-content-md-end">
+                            <button class="btn btn-primary ms-4 me-md-1" id="btn-search" type="button">Search</button>
+                            <button class="btn btn-primary" type="button" id="btn-current">Current</button>
+                        </div>
                     </div>
-
-                </div>
-
+                </form>
             </div>
             <div class="weather-info mt-4 ps-5">
                 <div class="row">
@@ -42,10 +41,14 @@
                                 22°
                             </li>
                         </ul>
+                        <div class="btn-group pb-3" role="group">
+                            <button type="button" class="btn btn-primary unit">°C</button>
+                            <button type="button" class="btn btn-primary unit">°F</button>
+                        </div>
                     </div>
                     <div class="col">
                         <img src="images/cloudy.png" class="float-start weather-icon pe-2" alt="weather icon">
-                        <h2 id="temperature">23<span id="units">°C|°F</span></h2>
+                        <h2 id="temperature">23°</h2>
                     </div>
                 </div>
                 <div class="row">
