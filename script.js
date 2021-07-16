@@ -1,36 +1,64 @@
 'use strict';
 const apiKey = "718938e8a3e4822470de1037fd72347a";
 let unit = "metric";
-let cityName = "lisboa";
+let cityName = "pisa";
 
 //functions
+function formatDate(date) {
+//calculate the date
+    let hours = date.getUTCHours();
+    if (hours < 10) {
+        hours = `0${hours}`
+    }
+    let minutes = date.getUTCMinutes();
+    if (minutes < 10) {
+        minutes = `0${minutes}`
+    }
+    let currentDate = date.getUTCDate();
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    let currentDay = days[date.getUTCDay()];
+    const months = ["January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
+    ];
+    let currentMonth = months[date.getUTCMonth()];
+
+    return `${currentDay}, ${currentDate} ${currentMonth} <i class="far fa-clock" style="color: #4fa5c2"></i> ${hours}:${minutes}`;
+}
+
+//
 function displayTemperature(response) {
     console.log(response.data)
     const cityElement = document.querySelector("#city");
-    const currentCity = response.data.name;
-    const currentCountry = response.data.sys.country;
-    cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
-    const currentTemperature = Math.round(response.data.main.temp);
+    let currentCity = response.data.name;
+    let currentCountry = response.data.sys.country;
+    let currentTemperature = Math.round(response.data.main.temp);
     const temperatureElement = document.querySelector("#temperature");
-    temperatureElement.innerHTML = `${currentTemperature}°`;
     const DescriptionElement = document.querySelector("#weather-description");
-    const currentDescription = response.data.weather[0].description;
-    DescriptionElement.innerHTML = currentDescription;
+    let currentDescription = response.data.weather[0].description;
     const humidityElement = document.querySelector("#humidity");
-    const currentHumidity = response.data.main.humidity;
-    humidityElement.innerHTML = `<i class="fas fa-water"></i> Humidity <strong>${currentHumidity}%</strong>`;
-    const pressureElement = document.querySelector("#pressure");
-    const currentPressure = response.data.main.pressure;
-    pressureElement.innerHTML = `<i class="fas fa-compress-alt"></i> Pressure <strong>${currentPressure}hPa</strong>`;
+    let currentHumidity = response.data.main.humidity;
     const visibilityElement = document.querySelector("#visibility");
-    const currentVisibility = (response.data.visibility) / 1000;
-    visibilityElement.innerHTML = `<i class="far fa-lightbulb"></i> Visibility <strong> ${currentVisibility}km </strong>`;
+    let currentVisibility = (response.data.visibility) / 1000;
     const feelsLikeElement = document.querySelector("#feels-like");
-    const currentFeelsLike = Math.round(response.data.main.feels_like);
-    feelsLikeElement.innerHTML = `<i class="fas fa-temperature-low"></i> Feels like <strong>${currentFeelsLike}°</strong>`;
+    let currentFeelsLike = Math.round(response.data.main.feels_like);
+    const windElement = document.querySelector("#wind");
+    let currentWind = Math.round(response.data.wind.speed);
     const maxMinTemperatureElement = document.querySelector("#high-low-temp");
-    const currentMaxTemperature = Math.round(response.data.main.temp_max);
-    const currentMinTemperature = Math.round(response.data.main.temp_min);
+    let currentMaxTemperature = Math.round(response.data.main.temp_max);
+    let currentMinTemperature = Math.round(response.data.main.temp_min);
+    const dateTimeElement = document.querySelector("#date-time");
+    // Applying Timezone
+    let utcTime = new Date();
+    let localTime = new Date(utcTime.getTime() + response.data.timezone * 1000);
+    dateTimeElement.innerHTML = formatDate(localTime);
+
+    cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
+    temperatureElement.innerHTML = `${currentTemperature}°`;
+    DescriptionElement.innerHTML = currentDescription;
+    humidityElement.innerHTML = `<i class="fas fa-water"></i> Humidity <strong>${currentHumidity}%</strong>`;
+    visibilityElement.innerHTML = `<i class="far fa-lightbulb"></i> Visibility <strong> ${currentVisibility}km </strong>`;
+    feelsLikeElement.innerHTML = `<i class="fas fa-temperature-low"></i> Feels like <strong>${currentFeelsLike}°</strong>`;
+    windElement.innerHTML = `<i class="fas fa-wind"></i> Wind <strong>${currentWind}km/H</strong>`;
     maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
     Night ${currentMinTemperature}°`;
 }
