@@ -46,6 +46,7 @@ function displayTemperature(response) {
     let currentMinTemperature = Math.round(response.data.main.temp_min);
     const dateTimeElement = document.querySelector("#date-time");
     const iconElement = document.querySelector("#icon");
+
     // Applying Timezone
     let utcTime = new Date();
     let localTime = new Date(utcTime.getTime() + response.data.timezone * 1000);
@@ -60,8 +61,25 @@ function displayTemperature(response) {
     windElement.innerHTML = `<strong>${currentWind}km/H</strong>`;
     maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
     Night ${currentMinTemperature}°`;
-    iconElement.setAttribute("src", `https://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`); //Changing attribute "src" to another value
+
+    const iconMap = {
+        '01d': 'sun.png',
+        '01n': 'night.png',
+        '02d': 'cloudy.png',
+        '02n': 'cloud-night',
+        '03d': 'cloud.png',
+        '04d': 'broken-clouds.png',
+        '09d': 'rain.png',
+        '10d': 'rainy.png',
+        '11d': 'storm.png',
+        '13d': 'snowy.png',
+        '50d': 'mist.png',
+    };
+    console.log(iconMap)
+    let iconApi = response.data.weather[0].icon;
+    iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
     iconElement.setAttribute("alt", response.data.weather[0].description);
+
 }
 
 function updateCity(cityName) {
@@ -76,14 +94,15 @@ function handleSubmit(event) {
 
     console.log(searchInput)
 }
-function handlePosition (position) {
+
+function handlePosition(position) {
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
     axios.get(url).then(displayTemperature);
 }
 
-function currentPosition (position) {
+function currentPosition(position) {
     position.preventDefault();
     navigator.geolocation.getCurrentPosition(handlePosition);
 }
