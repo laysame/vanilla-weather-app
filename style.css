@@ -67,9 +67,13 @@ strong {
     color: #f9fbfc;
 }
 
-.unit, .unit:focus{
+.unit {
+    background-color: #f9fbfc;
+    color: #f587ac;
+}
+.unit:focus{
     background-color: #f587ac;
-    border: 1px solid #4fa5c2;
+    border: 1px solid #f587ac;
 }
 
 .unit:hover {
@@ -85,3 +89,4 @@ strong {
     margin: 0 auto;
     display: block;
 }
+
