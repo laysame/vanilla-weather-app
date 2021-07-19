@@ -14,7 +14,8 @@ const visibilityElement = document.querySelector("#visibility");
 const windElement = document.querySelector("#wind");
 const dateTimeElement = document.querySelector("#date-time");
 const iconElement = document.querySelector("#icon");
-
+const inputFormElement = document.querySelector("#input-form");
+const inputSearchElement = document.querySelector("#input-search");
 
 function formatDate(date) {
 //calculate the date
@@ -38,7 +39,7 @@ function formatDate(date) {
 }
 
 function displayTemperature(response) {
-
+console.log(response.data)
     let currentCity = response.data.name;
     let currentCountry = response.data.sys.country;
     celsiusTemperature = Math.round(response.data.main.temp);
@@ -47,8 +48,10 @@ function displayTemperature(response) {
     let currentVisibility = (response.data.visibility) / 1000;
     currentFeelsLike = Math.round(response.data.main.feels_like);
     let currentWind = Math.round(response.data.wind.speed);
+
     currentMaxTemperature = Math.round(response.data.main.temp_max);
     currentMinTemperature = Math.round(response.data.main.temp_min);
+
     cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
     temperatureElement.innerHTML = `${celsiusTemperature}°`;
     DescriptionElement.innerHTML = currentDescription;
@@ -62,7 +65,7 @@ function displayTemperature(response) {
     let utcTime = new Date();
     let localTime = new Date(utcTime.getTime() + response.data.timezone * 1000);
     dateTimeElement.innerHTML = formatDate(localTime);
-    // Change Icons
+    // Changing Icons
     const iconMap = {
         '01d': 'sun.png',
         '01n': 'night.png',
@@ -71,7 +74,7 @@ function displayTemperature(response) {
         '03d': 'cloud.png',
         '03n': 'cloud.png',
         '04d': 'broken-clouds.png',
-        '04n':'broken-clouds.png',
+        '04n': 'broken-clouds.png',
         '09d': 'rain.png',
         '09n': 'rain.png',
         '10d': 'rainy.png',
@@ -85,11 +88,8 @@ function displayTemperature(response) {
     };
 
     let iconApi = response.data.weather[0].icon;
-    console.log(iconApi)
     iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
     iconElement.setAttribute("alt", response.data.weather[0].description);
-
-
 }
 
 function updateCity(cityName) {
@@ -122,8 +122,7 @@ function currentPosition(position) {
     navigator.geolocation.getCurrentPosition(handlePosition);
 }
 
-const inputFormElement = document.querySelector("#input-form");
-const inputSearchElement = document.querySelector("#input-search");
+
 const buttonSearch = document.querySelector("#btn-search");
 const buttonCurrent = document.querySelector("#btn-current");
 const fahrenheitButton = document.querySelector("#fahrenheit-btn");
@@ -139,11 +138,11 @@ function displayFahrenheitTemperature(event) {
     temperatureElement.innerHTML = `${fahrenheitTemperature}°`;
     currentFeelsLike = Math.round((currentFeelsLike * 9) / 5 + 32);
     feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
-    //currentMaxTemperature = Math.round((currentMaxTemperature * 9) / 5 + 32);
-   // currentMinTemperature = Math.round((currentMinTemperature * 9) / 5 + 32);
-    //maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
-    //Night ${currentMinTemperature}°`;
-    console.log(currentMaxTemperature, currentMinTemperature)
+    let currentMaxTemperatureF = Math.round((currentMaxTemperature * 9) / 5 + 32);
+    let currentMinTemperatureF = Math.round((currentMinTemperature * 9) / 5 + 32);
+    maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperatureF}° <i class="fas fa-arrow-circle-down"></i>
+    Night ${currentMinTemperatureF}°`;
+    console.log(currentMaxTemperatureF, currentMinTemperature)
 }
 
 function displayCelsiusTemperature(event) {
@@ -151,8 +150,14 @@ function displayCelsiusTemperature(event) {
     fahrenheitButton.classList.remove("disabled")
     celsiusButton.classList.add("disabled");
     temperatureElement.innerHTML = `${celsiusTemperature}°`;
-    currentFeelsLike = Math.round((currentFeelsLike -32) *5/9);
+    currentFeelsLike = Math.round((currentFeelsLike - 32) * 5 / 9);
     feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
+
+    let currentMaxTemperatureC = Math.round(currentMaxTemperature);
+    let currentMinTemperatureC = Math.round(currentMinTemperature);
+    maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperatureC}° <i class="fas fa-arrow-circle-down"></i>
+    Night ${currentMinTemperatureC}°`;
+
     console.log(currentFeelsLike)
 }
 
