@@ -1,9 +1,8 @@
 'use strict';
 const apiKey = "718938e8a3e4822470de1037fd72347a";
-let latitude;
-let longitude;
+let celsiusTemperature = null;
+const temperatureElement = document.querySelector("#temperature");
 
-//functions
 function formatDate(date) {
 //calculate the date
     let hours = date.getUTCHours();
@@ -30,8 +29,8 @@ function displayTemperature(response) {
     const cityElement = document.querySelector("#city");
     let currentCity = response.data.name;
     let currentCountry = response.data.sys.country;
-    let currentTemperature = Math.round(response.data.main.temp);
-    const temperatureElement = document.querySelector("#temperature");
+    celsiusTemperature = Math.round(response.data.main.temp);
+
     const DescriptionElement = document.querySelector("#weather-description");
     let currentDescription = response.data.weather[0].description;
     const humidityElement = document.querySelector("#humidity");
@@ -54,7 +53,7 @@ function displayTemperature(response) {
     dateTimeElement.innerHTML = formatDate(localTime);
 
     cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
-    temperatureElement.innerHTML = `${currentTemperature}°`;
+    temperatureElement.innerHTML = `${celsiusTemperature}°`;
     DescriptionElement.innerHTML = currentDescription;
     humidityElement.innerHTML = `<strong>${currentHumidity}%</strong>`;
     visibilityElement.innerHTML = `<strong> ${currentVisibility}km </strong>`;
@@ -83,50 +82,34 @@ function displayTemperature(response) {
 
 }
 
-function getUnit() {
-    if (celsiusButton.classList.contains("disabled")) {
-        return "metric";
-    } else {
-        return "imperial";
-    }
-
+function updateCity(cityName) {
+    let unit = getUnit();
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
+    axios.get(apiUrl).then(displayTemperature);
 }
-
-function updateTemperature(currentPosition) {
-    let cityName = inputSearchElement.value.trim();
-    const unit = getUnit();
-
-    if (currentPosition === false) {
-        if (!cityName) {
-            cityName = 'london';
-        }
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
-        axios.get(apiUrl).then(displayTemperature);
-    } else {
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
-        axios.get(url).then(displayTemperature);
-    }
-}
-
-
-
 
 function handleSubmit(event) {
     event.preventDefault();
-    updateTemperature(false);
+    const searchInput = inputSearchElement.value.trim();
+    updateCity(searchInput);
+
 }
 
-function handlePositionSuccess(position) {
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
-
-    updateTemperature(true);
+function getUnit() {
+    return "metric";
 }
 
+function handlePosition(position) {
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    let unit = getUnit();
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
+    axios.get(url).then(displayTemperature);
+}
 
 function currentPosition(position) {
-    //position.preventDefault();
-    navigator.geolocation.getCurrentPosition(handlePositionSuccess);
+    position.preventDefault();
+    navigator.geolocation.getCurrentPosition(handlePosition);
 }
 
 const inputFormElement = document.querySelector("#input-form");
@@ -137,18 +120,20 @@ const fahrenheitButton = document.querySelector("#fahrenheit-btn");
 const celsiusButton = document.querySelector("#celsius-btn");
 
 function displayCelsiusTemperature() {
-    fahrenheitButton.classList.remove("disabled")
-    celsiusButton.classList.add("disabled");
-
-    updateTemperature(false);
+    fahrenheitButton.classList.remove("active")
+    celsiusButton.classList.add("active");
+    console.log(celsiusButton)
 }
 
 function displayFahrenheitTemperature() {
-    celsiusButton.classList.remove("disabled");
-    fahrenheitButton.classList.add("disabled")
+    celsiusButton.classList.remove("active");
+    fahrenheitButton.classList.add("active")
 
-    updateTemperature(false);
+    let fahrenheitTemperature = Math.round((celsiusTemperature * 9) / 5 + 32);
+    temperatureElement.innerHTML = `${fahrenheitTemperature}°`;
+
 }
+
 
 inputFormElement.addEventListener("submit", handleSubmit);
 buttonSearch.addEventListener("click", handleSubmit);
@@ -156,6 +141,5 @@ buttonCurrent.addEventListener("click", currentPosition);
 fahrenheitButton.addEventListener("click", displayFahrenheitTemperature);
 celsiusButton.addEventListener("click", displayCelsiusTemperature);
 
-
-updateTemperature(false);
-
+updateCity("london");
+currentPosition();
