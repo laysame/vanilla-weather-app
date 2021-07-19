@@ -1,7 +1,10 @@
 'use strict';
 const apiKey = "718938e8a3e4822470de1037fd72347a";
 let celsiusTemperature = null;
+let currentFeelsLike = null;
 const temperatureElement = document.querySelector("#temperature");
+const feelsLikeElement = document.querySelector("#feels-like");
+const maxMinTemperatureElement = document.querySelector("#high-low-temp");
 
 function formatDate(date) {
 //calculate the date
@@ -25,9 +28,6 @@ function formatDate(date) {
 }
 
 function displayTemperature(response) {
-    console.log(response.data)
-
-
     const cityElement = document.querySelector("#city");
     let currentCity = response.data.name;
     let currentCountry = response.data.sys.country;
@@ -39,11 +39,11 @@ function displayTemperature(response) {
     let currentHumidity = response.data.main.humidity;
     const visibilityElement = document.querySelector("#visibility");
     let currentVisibility = (response.data.visibility) / 1000;
-    const feelsLikeElement = document.querySelector("#feels-like");
-    let currentFeelsLike = Math.round(response.data.main.feels_like);
+
+    currentFeelsLike = Math.round(response.data.main.feels_like);
     const windElement = document.querySelector("#wind");
     let currentWind = Math.round(response.data.wind.speed);
-    const maxMinTemperatureElement = document.querySelector("#high-low-temp");
+
     let currentMaxTemperature = Math.round(response.data.main.temp_max);
     let currentMinTemperature = Math.round(response.data.main.temp_min);
     const dateTimeElement = document.querySelector("#date-time");
@@ -129,15 +129,21 @@ function displayFahrenheitTemperature(event) {
 
     let fahrenheitTemperature = Math.round((celsiusTemperature * 9) / 5 + 32);
     temperatureElement.innerHTML = `${fahrenheitTemperature}°`;
+    currentFeelsLike = Math.round((currentFeelsLike * 9) / 5 + 32);
+    feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
 }
+
 function displayCelsiusTemperature(event) {
     event.preventDefault();
     fahrenheitButton.classList.remove("disabled")
     celsiusButton.classList.add("disabled");
     temperatureElement.innerHTML = `${celsiusTemperature}°`;
+   currentFeelsLike = Math.round((currentFeelsLike -32) *5/9);
+   feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
+   console.log(currentFeelsLike)
 }
 
-
+// Events listener
 inputFormElement.addEventListener("submit", handleSubmit);
 buttonSearch.addEventListener("click", handleSubmit);
 buttonCurrent.addEventListener("click", currentPosition);
