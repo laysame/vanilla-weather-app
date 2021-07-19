@@ -1,6 +1,7 @@
 'use strict';
 const apiKey = "718938e8a3e4822470de1037fd72347a";
-let unit = "metric";
+let latitude;
+let longitude;
 
 //functions
 function formatDate(date) {
@@ -75,46 +76,93 @@ function displayTemperature(response) {
         '13d': 'snowy.png',
         '50d': 'mist.png',
     };
-    console.log(iconMap)
+
     let iconApi = response.data.weather[0].icon;
     iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
     iconElement.setAttribute("alt", response.data.weather[0].description);
 
 }
 
-function updateCity(cityName) {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
-    axios.get(apiUrl).then(displayTemperature);
+function getUnit() {
+    if (celsiusButton.classList.contains("disabled")) {
+        return "metric";
+    } else {
+        return "imperial";
+    }
+
 }
+
+function updateTemperature(currentPosition) {
+    const cityName = inputSearchElement.value.trim();
+    const unit = getUnit();
+
+    if (currentPosition === false) {
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
+        axios.get(apiUrl).then(displayTemperature);
+    } else {
+        if (latitude && longitude){
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
+            axios.get(url).then(displayTemperature);
+        } else {
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=london,&appid=${apiKey}&units=${unit}`;
+            axios.get(apiUrl).then(displayTemperature);
+        }
+    }
+}
+
+
+
 
 function handleSubmit(event) {
     event.preventDefault();
-    const searchInput = inputSearchElement.value.trim();
-    updateCity(searchInput);
-
-    console.log(searchInput)
+    updateTemperature(false);
 }
 
-function handlePosition(position) {
-    let latitude = position.coords.latitude;
-    let longitude = position.coords.longitude;
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
-    axios.get(url).then(displayTemperature);
+function handlePositionSuccess(position) {
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+
+    updateTemperature(true);
+}
+
+function handlePositionFail(position) {
+    updateTemperature(true);
 }
 
 function currentPosition(position) {
-    position.preventDefault();
-    navigator.geolocation.getCurrentPosition(handlePosition);
+    //position.preventDefault();
+    navigator.geolocation.getCurrentPosition(handlePositionSuccess, handlePositionFail);
 }
 
 const inputFormElement = document.querySelector("#input-form");
 const inputSearchElement = document.querySelector("#input-search");
 const buttonSearch = document.querySelector("#btn-search");
 const buttonCurrent = document.querySelector("#btn-current");
+const fahrenheitButton = document.querySelector("#fahrenheit-btn");
+const celsiusButton = document.querySelector("#celsius-btn");
+
+function displayCelsiusTemperature() {
+    fahrenheitButton.classList.remove("disabled")
+    celsiusButton.classList.add("disabled");
+
+    updateTemperature(false);
+}
+
+function displayFahrenheitTemperature() {
+    celsiusButton.classList.remove("disabled");
+    fahrenheitButton.classList.add("disabled")
+
+    updateTemperature(false);
+}
 
 inputFormElement.addEventListener("submit", handleSubmit);
 buttonSearch.addEventListener("click", handleSubmit);
-buttonCurrent.addEventListener("click", currentPosition);
+buttonCurrent.addEventListener("click", function () {
+    updateTemperature(true);
+});
+fahrenheitButton.addEventListener("click", displayFahrenheitTemperature);
+celsiusButton.addEventListener("click", displayCelsiusTemperature);
 
-updateCity("london");
+
 currentPosition();
+
