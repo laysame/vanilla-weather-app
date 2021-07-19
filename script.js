@@ -93,20 +93,18 @@ function getUnit() {
 }
 
 function updateTemperature(currentPosition) {
-    const cityName = inputSearchElement.value.trim();
+    let cityName = inputSearchElement.value.trim();
     const unit = getUnit();
 
     if (currentPosition === false) {
+        if (!cityName) {
+            cityName = 'london';
+        }
         const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
         axios.get(apiUrl).then(displayTemperature);
     } else {
-        if (latitude && longitude){
-            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
-            axios.get(url).then(displayTemperature);
-        } else {
-            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=london,&appid=${apiKey}&units=${unit}`;
-            axios.get(apiUrl).then(displayTemperature);
-        }
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
+        axios.get(url).then(displayTemperature);
     }
 }
 
@@ -125,13 +123,10 @@ function handlePositionSuccess(position) {
     updateTemperature(true);
 }
 
-function handlePositionFail(position) {
-    updateTemperature(true);
-}
 
 function currentPosition(position) {
     //position.preventDefault();
-    navigator.geolocation.getCurrentPosition(handlePositionSuccess, handlePositionFail);
+    navigator.geolocation.getCurrentPosition(handlePositionSuccess);
 }
 
 const inputFormElement = document.querySelector("#input-form");
@@ -157,12 +152,10 @@ function displayFahrenheitTemperature() {
 
 inputFormElement.addEventListener("submit", handleSubmit);
 buttonSearch.addEventListener("click", handleSubmit);
-buttonCurrent.addEventListener("click", function () {
-    updateTemperature(true);
-});
+buttonCurrent.addEventListener("click", currentPosition);
 fahrenheitButton.addEventListener("click", displayFahrenheitTemperature);
 celsiusButton.addEventListener("click", displayCelsiusTemperature);
 
 
-currentPosition();
+updateTemperature(false);
 
