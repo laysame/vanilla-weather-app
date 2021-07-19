@@ -26,6 +26,8 @@ function formatDate(date) {
 
 function displayTemperature(response) {
     console.log(response.data)
+
+
     const cityElement = document.querySelector("#city");
     let currentCity = response.data.name;
     let currentCountry = response.data.sys.country;
@@ -119,19 +121,20 @@ const buttonCurrent = document.querySelector("#btn-current");
 const fahrenheitButton = document.querySelector("#fahrenheit-btn");
 const celsiusButton = document.querySelector("#celsius-btn");
 
-function displayCelsiusTemperature() {
-    fahrenheitButton.classList.remove("active")
-    celsiusButton.classList.add("active");
-    console.log(celsiusButton)
-}
 
-function displayFahrenheitTemperature() {
-    celsiusButton.classList.remove("active");
-    fahrenheitButton.classList.add("active")
+function displayFahrenheitTemperature(event) {
+    event.preventDefault();
+    celsiusButton.classList.remove("disabled");
+    fahrenheitButton.classList.add("disabled")
 
     let fahrenheitTemperature = Math.round((celsiusTemperature * 9) / 5 + 32);
     temperatureElement.innerHTML = `${fahrenheitTemperature}°`;
-
+}
+function displayCelsiusTemperature(event) {
+    event.preventDefault();
+    fahrenheitButton.classList.remove("disabled")
+    celsiusButton.classList.add("disabled");
+    temperatureElement.innerHTML = `${celsiusTemperature}°`;
 }
 
 
