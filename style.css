@@ -7,12 +7,11 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    font-size:0.9em;
+    font-size:0.8em;
 }
 
 .wrapper {
     font-family: 'Poppins', sans-serif;
-
     margin: 0 auto;
     max-width: 600px;
     color: #4fa5c2;
@@ -38,8 +37,8 @@ i:hover {
     color: #4fa5c2;
 }
 
-img {
-    width: 30%;
+.weather-icon {
+    width: 5rem;
 }
 
 strong {
@@ -47,7 +46,7 @@ strong {
 }
 
 .temp-weather strong {
-    font-size: 4rem;
+    font-size: 3rem;
     line-height: 1;
 }
 
@@ -87,14 +86,32 @@ strong {
 }
 
 .list-group-item {
-    border: 1px solid #4fa5c2;
+    color: #4fa5c2;
+    border: none;
     text-align: center;
     margin: 0 auto;
     display: block;
 }
 
-.github-link, .netlify-link, .netlify-link:hover, .github-link:hover {
+footer p {
+    font-size: 10px;
+    text-align: center;
+}
+
+.github-link, .netlify-link, .linkedin-link, .linkedin-link:hover .netlify-link:hover, .github-link:hover {
     color: #f587ac;
     text-decoration: none;
+}
+
+div h5 {
+    font-size: 1em;
+}
+
+.weather-icon-forecast {
+    width: 1.5rem;
+}
+
+.forecast-list {
+    text-align: center;
 }
 
