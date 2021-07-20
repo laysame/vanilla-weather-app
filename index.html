@@ -17,7 +17,8 @@
             <div class="col-12 mt-5 ps-5 pe-5">
                 <form id="input-form">
                     <div class="input-group">
-                        <input type="search" class="form-control rounded" id="input-search" placeholder="Enter a city" autocomplete="off"
+                        <input type="search" class="form-control rounded" id="input-search" placeholder="Enter a city"
+                               autocomplete="off"
                                autofocus>
 
                         <div class="justify-content-md-end">
@@ -28,7 +29,7 @@
                 </form>
             </div>
             <div class="weather-info mt-4 ps-5">
-                <div class="row m-1">
+                <div class="row">
                     <div class="col">
                         <h1 id="city"></h1>
                         <ul class="p-0">
@@ -46,65 +47,42 @@
                         <h2 id="temperature"></h2>
                     </div>
                 </div>
-                <div class="row m-1">
-                    <div class="col mb-3 pe-5">
+                <div class="row">
+                    <div class="col mb-3 ms-0 ps-0">
                         <ul class="list-group list-group-horizontal">
-                            <li class="list-group-item p-0"><i class="fas fa-temperature-low"></i> Feels like <span id="feels-like"></span></li>
-                            <li class="list-group-item p-0"><i class="far fa-lightbulb"></i> Visibility<span id="visibility"></span></li>
-                            <li class="list-group-item p-0"><i class="fas fa-water"></i> Humidity <span id="humidity"></span></li>
-                            <li class="list-group-item p-0"><i class="fas fa-wind"></i> Wind <span id="wind"></span></li>
+                            <li class="list-group-item p-0"><i class="fas fa-temperature-low"></i> Feels like <span
+                                    id="feels-like"></span></li>
+                            <li class="list-group-item p-0"><i class="far fa-lightbulb"></i> Visibility<span
+                                    id="visibility"></span></li>
+                            <li class="list-group-item p-0"><i class="fas fa-water"></i> Humidity <span
+                                    id="humidity"></span></li>
+                            <li class="list-group-item p-0"><i class="fas fa-wind"></i> Wind <span id="wind"></span>
+                            </li>
                         </ul>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="row m-0 p-0">
-                            <div class="col">
-                                <ul class="list-group list-group m-0 p-2">
-                                    <li class="list-group-item p-0 forecast-list mb-1">Monday</li>
-                                    <li class="list-group-item p-0 forecast-list">28°</li>
-                                    <li class="list-group-item p-0 forecast-list"><img src="images/cloudy.png" alt="" class="weather-icon-forecast"></li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <ul class="list-group list-group m-0 p-2">
-                                    <li class="list-group-item p-0 forecast-list mb-1">Tuesday</li>
-                                    <li class="list-group-item p-0 forecast-list">28°</li>
-                                    <li class="list-group-item p-0 forecast-list"><img src="images/cloudy.png" alt="" class="weather-icon-forecast"></li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <ul class="list-group list-group m-0 p-2">
-                                    <li class="list-group-item p-0 forecast-list mb-1">Wednesday</li>
-                                    <li class="list-group-item p-0 forecast-list">28°</li>
-                                    <li class="list-group-item p-0 forecast-list"><img src="images/cloudy.png" alt="" class="weather-icon-forecast"></li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <ul class="list-group list-group m-0 p-2">
-                                    <li class="list-group-item p-0 forecast-list mb-1">Thursday</li>
-                                    <li class="list-group-item p-0 forecast-list">28°</li>
-                                    <li class="list-group-item p-0 forecast-list"><img src="images/cloudy.png" alt="" class="weather-icon-forecast"></li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <ul class="list-group list-group m-0 p-2">
-                                    <li class="list-group-item p-0 forecast-list mb-1" >Friday</li>
-                                    <li class="list-group-item p-0 forecast-list">28°</li>
-                                    <li class="list-group-item p-0 forecast-list"><img src="images/cloudy.png" alt="" class="weather-icon-forecast"></li>
-                                </ul>
+                <div class="weather-forecast">
+                    <div class="row">
+                        <div class="col">
+                            <div class="weather-forecast-day m-1">Monday</div>
+                            <img src="images/cloudy.png" alt="" class="weather-forecast-icon m-1">
+                            <div class="weather-forecast-temperature m-1">
+                                <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>30°</span>
+                                <span class="forecast-temperature-min"><i class="fas fa-arrow-circle-down"></i>15°</span>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
     <footer class="footer mt-2">
-        <p>This project was coded by <a href="https://www.linkedin.com/in/laysasouza/" class="linkedin-link" target="_blank">Laysa Souza <i class="fab fa-linkedin"></i> </a>and is <a href="https://github.com/laysame/vanilla-weather-app" target="_blank" class="github-link">open-sourced on GitHub <i class="fab fa-github"></i></a> and <a href="https://laughing-aryabhata-65e104.netlify.app/" class="netlify-link" target="_blank">hosted on Netlify</a></p>
+        <p>This project was coded by <a href="https://www.linkedin.com/in/laysasouza/" class="linkedin-link"
+                                        target="_blank">Laysa Souza <i class="fab fa-linkedin"></i> </a>and is <a
+                href="https://github.com/laysame/vanilla-weather-app" target="_blank" class="github-link">open-sourced
+            on GitHub <i class="fab fa-github"></i></a> and <a href="https://laughing-aryabhata-65e104.netlify.app/"
+                                                               class="netlify-link" target="_blank">hosted on
+            Netlify</a></p>
     </footer>
     <script src="script.js"></script>
 </body>

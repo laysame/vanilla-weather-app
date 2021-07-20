@@ -107,11 +107,14 @@ div h5 {
     font-size: 1em;
 }
 
-.weather-icon-forecast {
+.weather-forecast-icon {
     width: 1.5rem;
 }
 
-.forecast-list {
+.weather-forecast{
     text-align: center;
 }
 
+.forecast-temperature-min {
+    opacity: 0.8;
+}
