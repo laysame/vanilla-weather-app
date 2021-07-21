@@ -16,6 +16,7 @@ const dateTimeElement = document.querySelector("#date-time");
 const iconElement = document.querySelector("#icon");
 const inputFormElement = document.querySelector("#input-form");
 const inputSearchElement = document.querySelector("#input-search");
+const forecastElement = document.querySelector("#forecast");
 
 function formatDate(date) {
 //calculate the date
@@ -39,7 +40,7 @@ function formatDate(date) {
 }
 
 function displayTemperature(response) {
-console.log(response.data)
+    console.log(response.data)
     let currentCity = response.data.name;
     let currentCountry = response.data.sys.country;
     celsiusTemperature = Math.round(response.data.main.temp);
@@ -90,6 +91,8 @@ console.log(response.data)
     let iconApi = response.data.weather[0].icon;
     iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
     iconElement.setAttribute("alt", response.data.weather[0].description);
+
+    displayForecast();
 }
 
 function updateCity(cityName) {
@@ -143,6 +146,23 @@ function displayFahrenheitTemperature(event) {
     maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperatureF}° <i class="fas fa-arrow-circle-down"></i>
     Night ${currentMinTemperatureF}°`;
     console.log(currentMaxTemperatureF, currentMinTemperature)
+}
+
+function displayForecast() {
+    let forecastHtml = '<div class="row">';
+    forecastHtml = forecastHtml + `
+                            <div class="col">
+                                <div class="weather-forecast-day m-1">Monday</div>
+                                <img src="images/cloudy.png" alt="" class="weather-forecast-icon m-1">
+                                <div class="weather-forecast-temperature m-1">
+                                <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>30°</span>
+                                <span class="forecast-temperature-min"><i class="fas fa-arrow-circle-down"></i>15°</span>
+                                </div>
+                            </div> 
+    `;
+
+    forecastHtml = forecastHtml + `</div>`;
+    forecastElement.innerHTML = forecastHtml;
 }
 
 function displayCelsiusTemperature(event) {
