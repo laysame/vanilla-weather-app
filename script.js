@@ -150,17 +150,20 @@ function displayFahrenheitTemperature(event) {
 
 function displayForecast() {
     let forecastHtml = '<div class="row">';
-    forecastHtml = forecastHtml + `
+
+    let forecastDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday" ];
+
+    forecastDays.forEach(function (day) {
+        forecastHtml = forecastHtml + `
                             <div class="col">
-                                <div class="weather-forecast-day m-1">Monday</div>
+                                <div class="weather-forecast-day m-1">${day}</div>
                                 <img src="images/cloudy.png" alt="" class="weather-forecast-icon m-1">
                                 <div class="weather-forecast-temperature m-1">
                                 <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>30°</span>
                                 <span class="forecast-temperature-min"><i class="fas fa-arrow-circle-down"></i>15°</span>
                                 </div>
-                            </div> 
-    `;
-
+                            </div>`;
+    })
     forecastHtml = forecastHtml + `</div>`;
     forecastElement.innerHTML = forecastHtml;
 }
