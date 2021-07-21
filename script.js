@@ -39,34 +39,14 @@ function formatDate(date) {
     return `${currentDay}, ${currentDate} ${currentMonth} <i class="far fa-clock"></i> ${hours}:${minutes}`;
 }
 
-function displayTemperature(response) {
-    console.log(response.data)
-    let currentCity = response.data.name;
-    let currentCountry = response.data.sys.country;
-    celsiusTemperature = Math.round(response.data.main.temp);
-    let currentDescription = response.data.weather[0].description;
-    let currentHumidity = response.data.main.humidity;
-    let currentVisibility = (response.data.visibility) / 1000;
-    currentFeelsLike = Math.round(response.data.main.feels_like);
-    let currentWind = Math.round(response.data.wind.speed);
-
-    currentMaxTemperature = Math.round(response.data.main.temp_max);
-    currentMinTemperature = Math.round(response.data.main.temp_min);
-
-    cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
-    temperatureElement.innerHTML = `${celsiusTemperature}°`;
-    DescriptionElement.innerHTML = currentDescription;
-    humidityElement.innerHTML = `<strong>${currentHumidity}%</strong>`;
-    visibilityElement.innerHTML = `<strong> ${currentVisibility}km </strong>`;
-    feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
-    windElement.innerHTML = `<strong>${currentWind}km/H</strong>`;
-    maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
-    Night ${currentMinTemperature}°`;
-    // Applying Timezone
+function setTimeZone(response) {
     let utcTime = new Date();
-    let localTime = new Date(utcTime.getTime() + response.data.timezone * 1000);
+    let localTime = new Date(utcTime.getTime() + response * 1000);
     dateTimeElement.innerHTML = formatDate(localTime);
-    // Changing Icons
+}
+
+function changeIcon(pathApi) {
+    const iconApi = pathApi[0].icon;
     const iconMap = {
         '01d': 'sun.png',
         '01n': 'night.png',
@@ -88,10 +68,38 @@ function displayTemperature(response) {
         '50n': 'mist.png',
     };
 
-    let iconApi = response.data.weather[0].icon;
     iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
-    iconElement.setAttribute("alt", response.data.weather[0].description);
+    iconElement.setAttribute("alt", pathApi[0].description);
+}
 
+function displayTemperature(response) {
+    const responseData = response.data;
+    let currentCity = responseData.name;
+    let currentCountry = responseData.sys.country;
+    celsiusTemperature = Math.round(responseData.main.temp);
+    let currentDescription = responseData.weather[0].description;
+    let currentHumidity = responseData.main.humidity;
+    let currentVisibility = (responseData.visibility) / 1000;
+    currentFeelsLike = Math.round(responseData.main.feels_like);
+    let currentWind = Math.round(responseData.wind.speed);
+    currentMaxTemperature = Math.round(responseData.main.temp_max);
+    currentMinTemperature = Math.round(responseData.main.temp_min);
+    cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
+    temperatureElement.innerHTML = `${celsiusTemperature}°`;
+    DescriptionElement.innerHTML = currentDescription;
+    humidityElement.innerHTML = `<strong>${currentHumidity}%</strong>`;
+    visibilityElement.innerHTML = `<strong> ${currentVisibility}km </strong>`;
+    feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
+    windElement.innerHTML = `<strong>${currentWind}km/H</strong>`;
+    maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
+    Night ${currentMinTemperature}°`;
+    // Applying Timezone
+    const timeZoneAPI = responseData.timezone;
+    setTimeZone(timeZoneAPI);
+    // Changing Icons
+    const weatherAPI = responseData.weather;
+    changeIcon(weatherAPI);
+    // Calling the function to display the forecast
     displayForecast();
 }
 
@@ -151,7 +159,7 @@ function displayFahrenheitTemperature(event) {
 function displayForecast() {
     let forecastHtml = '<div class="row">';
 
-    let forecastDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday" ];
+    let forecastDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
     forecastDays.forEach(function (day) {
         forecastHtml = forecastHtml + `
