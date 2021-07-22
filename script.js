@@ -45,13 +45,13 @@ function setTimeZone(response) {
     dateTimeElement.innerHTML = formatDate(localTime);
 }
 
-function changeIcon(pathApi) {
+function setIcon(pathApi) {
     const iconApi = pathApi[0].icon;
     const iconMap = {
         '01d': 'sun.png',
         '01n': 'night.png',
         '02d': 'cloudy.png',
-        '02n': 'cloud-night',
+        '02n': 'cloud-night.png',
         '03d': 'cloud.png',
         '03n': 'cloud.png',
         '04d': 'broken-clouds.png',
@@ -70,20 +70,59 @@ function changeIcon(pathApi) {
 
     iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
     iconElement.setAttribute("alt", pathApi[0].description);
+
+}
+function displayForecast(response) {
+    console.log(response.data)
+    let forecastHtml = '<div class="row">';
+
+    let forecastDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+    forecastDays.forEach(function (day) {
+        forecastHtml = forecastHtml + `
+                            <div class="col">
+                                <div class="weather-forecast-day m-1">${day}</div>
+                                <img src="images/cloudy.png" alt="" class="weather-forecast-icon m-1">
+                                <div class="weather-forecast-temperature m-1">
+                                <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>30°</span>
+                                <span class="forecast-temperature-min"><i class="fas fa-arrow-circle-down"></i>15°</span>
+                                </div>
+                            </div>`;
+    })
+    forecastHtml = forecastHtml + `</div>`;
+    forecastElement.innerHTML = forecastHtml;
+}
+
+function getForecast(coordinates) {
+    let unit = getUnit();
+    const latitudeForecast = coordinates.lat;
+    const longitudeForecast = coordinates.lon;
+    const forecastApiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitudeForecast}&lon=${longitudeForecast}&appid=${apiKey}&units=${unit}`;
+console.log(forecastApiUrl)
+    axios.get(forecastApiUrl).then(displayForecast);
 }
 
 function displayTemperature(response) {
-    const responseData = response.data;
-    let currentCity = responseData.name;
-    let currentCountry = responseData.sys.country;
-    celsiusTemperature = Math.round(responseData.main.temp);
-    let currentDescription = responseData.weather[0].description;
-    let currentHumidity = responseData.main.humidity;
-    let currentVisibility = (responseData.visibility) / 1000;
-    currentFeelsLike = Math.round(responseData.main.feels_like);
-    let currentWind = Math.round(responseData.wind.speed);
-    currentMaxTemperature = Math.round(responseData.main.temp_max);
-    currentMinTemperature = Math.round(responseData.main.temp_min);
+    const apiData = response.data;
+    const apiMain = apiData.main;
+    // Changing Icons
+    const apiWeather = apiData.weather;
+    setIcon(apiWeather);
+
+    let currentCity = apiData.name;
+    let currentCountry = apiData.sys.country;
+    celsiusTemperature = Math.round(apiMain.temp);
+    let currentDescription = apiWeather[0].description;
+    let currentHumidity = apiMain.humidity;
+    let currentVisibility = (apiData.visibility) / 1000;
+    currentFeelsLike = Math.round(apiMain.feels_like);
+    let currentWind = Math.round(apiData.wind.speed);
+    currentMaxTemperature = Math.round(apiMain.temp_max);
+    currentMinTemperature = Math.round(apiMain.temp_min);
+    // Applying Timezone
+    const timeZoneAPI = apiData.timezone;
+    setTimeZone(timeZoneAPI);
+
     cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
     temperatureElement.innerHTML = `${celsiusTemperature}°`;
     DescriptionElement.innerHTML = currentDescription;
@@ -93,14 +132,8 @@ function displayTemperature(response) {
     windElement.innerHTML = `<strong>${currentWind}km/H</strong>`;
     maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
     Night ${currentMinTemperature}°`;
-    // Applying Timezone
-    const timeZoneAPI = responseData.timezone;
-    setTimeZone(timeZoneAPI);
-    // Changing Icons
-    const weatherAPI = responseData.weather;
-    changeIcon(weatherAPI);
-    // Calling the function to display the forecast
-    displayForecast();
+
+    getForecast(apiData.coord);
 }
 
 function updateCity(cityName) {
@@ -112,8 +145,8 @@ function updateCity(cityName) {
 function handleSubmit(event) {
     event.preventDefault();
     let searchInput = inputSearchElement.value.trim();
-    updateCity(searchInput);
 
+    updateCity(searchInput);
 }
 
 function getUnit() {
@@ -154,26 +187,6 @@ function displayFahrenheitTemperature(event) {
     maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperatureF}° <i class="fas fa-arrow-circle-down"></i>
     Night ${currentMinTemperatureF}°`;
     console.log(currentMaxTemperatureF, currentMinTemperature)
-}
-
-function displayForecast() {
-    let forecastHtml = '<div class="row">';
-
-    let forecastDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
-    forecastDays.forEach(function (day) {
-        forecastHtml = forecastHtml + `
-                            <div class="col">
-                                <div class="weather-forecast-day m-1">${day}</div>
-                                <img src="images/cloudy.png" alt="" class="weather-forecast-icon m-1">
-                                <div class="weather-forecast-temperature m-1">
-                                <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>30°</span>
-                                <span class="forecast-temperature-min"><i class="fas fa-arrow-circle-down"></i>15°</span>
-                                </div>
-                            </div>`;
-    })
-    forecastHtml = forecastHtml + `</div>`;
-    forecastElement.innerHTML = forecastHtml;
 }
 
 function displayCelsiusTemperature(event) {
