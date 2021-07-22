@@ -8,7 +8,7 @@ const temperatureElement = document.querySelector("#temperature");
 const feelsLikeElement = document.querySelector("#feels-like");
 const maxMinTemperatureElement = document.querySelector("#high-low-temp");
 const cityElement = document.querySelector("#city");
-const DescriptionElement = document.querySelector("#weather-description");
+const descriptionElement = document.querySelector("#weather-description");
 const humidityElement = document.querySelector("#humidity");
 const visibilityElement = document.querySelector("#visibility");
 const windElement = document.querySelector("#wind");
@@ -126,7 +126,7 @@ function displayTemperature(response) {
     let currentCity = apiData.name;
     let currentCountry = apiData.sys.country;
     celsiusTemperature = Math.round(apiMain.temp);
-    let currentDescription = apiWeather[0].description;
+    let currentDescription = apiData.weather[0].description;
     let currentHumidity = apiMain.humidity;
     let currentVisibility = (apiData.visibility) / 1000;
     currentFeelsLike = Math.round(apiMain.feels_like);
@@ -139,7 +139,7 @@ function displayTemperature(response) {
 
     cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
     temperatureElement.innerHTML = `${celsiusTemperature}°`;
-    DescriptionElement.innerHTML = currentDescription;
+    descriptionElement.innerHTML = currentDescription;
     humidityElement.innerHTML = `<strong>${currentHumidity}%</strong>`;
     visibilityElement.innerHTML = `<strong> ${currentVisibility}km </strong>`;
     feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
@@ -186,45 +186,10 @@ const buttonCurrent = document.querySelector("#btn-current");
 const fahrenheitButton = document.querySelector("#fahrenheit-btn");
 const celsiusButton = document.querySelector("#celsius-btn");
 
-
-function displayFahrenheitTemperature(event) {
-    event.preventDefault();
-    celsiusButton.classList.remove("disabled");
-    fahrenheitButton.classList.add("disabled")
-
-    let fahrenheitTemperature = Math.round((celsiusTemperature * 9) / 5 + 32);
-    temperatureElement.innerHTML = `${fahrenheitTemperature}°`;
-    currentFeelsLike = Math.round((currentFeelsLike * 9) / 5 + 32);
-    feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
-    let currentMaxTemperatureF = Math.round((currentMaxTemperature * 9) / 5 + 32);
-    let currentMinTemperatureF = Math.round((currentMinTemperature * 9) / 5 + 32);
-    maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperatureF}° <i class="fas fa-arrow-circle-down"></i>
-    Night ${currentMinTemperatureF}°`;
-    console.log(currentMaxTemperatureF, currentMinTemperature)
-}
-
-function displayCelsiusTemperature(event) {
-    event.preventDefault();
-    fahrenheitButton.classList.remove("disabled")
-    celsiusButton.classList.add("disabled");
-    temperatureElement.innerHTML = `${celsiusTemperature}°`;
-    currentFeelsLike = Math.round((currentFeelsLike - 32) * 5 / 9);
-    feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
-
-    let currentMaxTemperatureC = Math.round(currentMaxTemperature);
-    let currentMinTemperatureC = Math.round(currentMinTemperature);
-    maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperatureC}° <i class="fas fa-arrow-circle-down"></i>
-    Night ${currentMinTemperatureC}°`;
-
-    console.log(currentFeelsLike)
-}
-
 // Events listener
 inputFormElement.addEventListener("submit", handleSubmit);
 buttonSearch.addEventListener("click", handleSubmit);
 buttonCurrent.addEventListener("click", currentPosition);
-fahrenheitButton.addEventListener("click", displayFahrenheitTemperature);
-celsiusButton.addEventListener("click", displayCelsiusTemperature);
 
-updateCity("london");
-currentPosition();
+
+updateCity("recife");
