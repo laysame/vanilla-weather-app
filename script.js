@@ -45,8 +45,8 @@ function setTimeZone(response) {
     dateTimeElement.innerHTML = formatDate(localTime);
 }
 
-function setIcon(pathApi) {
-    const iconApi = pathApi[0].icon;
+function setIcon(dataApi) {
+    const iconApi = dataApi;
     const iconMap = {
         '01d': 'sun.png',
         '01n': 'night.png',
@@ -69,25 +69,39 @@ function setIcon(pathApi) {
     };
 
     iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
-    iconElement.setAttribute("alt", pathApi[0].description);
+    iconElement.setAttribute("alt", dataApi[0].description);
 
 }
+
+function formatDay(timeStamp) {
+    let date = new Date(timeStamp * 1000);
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    let day = days[date.getDay()];
+
+    return day;
+}
+
 function displayForecast(response) {
-    console.log(response.data)
+
+    let forecast = response.data.daily;
+    console.log(forecast)
     let forecastHtml = '<div class="row">';
+    console.log(forecast[0].weather[0].icon)
 
-    let forecastDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-
-    forecastDays.forEach(function (day) {
-        forecastHtml = forecastHtml + `
+    forecast.forEach(function (forecastDay, index) {
+        if (index < 6 && index !== 0) {
+            forecastHtml = forecastHtml + `
                             <div class="col">
-                                <div class="weather-forecast-day m-1">${day}</div>
+                                <div class="weather-forecast-day m-1">${formatDay(forecastDay.dt)}</div>
                                 <img src="images/cloudy.png" alt="" class="weather-forecast-icon m-1">
+                                
                                 <div class="weather-forecast-temperature m-1">
-                                <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>30°</span>
-                                <span class="forecast-temperature-min"><i class="fas fa-arrow-circle-down"></i>15°</span>
+                                <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>${Math.round(forecastDay.temp.max)}°</span>
+                                <span class="forecast-temperature-min"><i class="fas fa-arrow-circle-down"></i>${Math.round(forecastDay.temp.min)}°</span>
                                 </div>
                             </div>`;
+        }
+
     })
     forecastHtml = forecastHtml + `</div>`;
     forecastElement.innerHTML = forecastHtml;
@@ -98,7 +112,7 @@ function getForecast(coordinates) {
     const latitudeForecast = coordinates.lat;
     const longitudeForecast = coordinates.lon;
     const forecastApiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitudeForecast}&lon=${longitudeForecast}&appid=${apiKey}&units=${unit}`;
-console.log(forecastApiUrl)
+
     axios.get(forecastApiUrl).then(displayForecast);
 }
 
@@ -106,7 +120,7 @@ function displayTemperature(response) {
     const apiData = response.data;
     const apiMain = apiData.main;
     // Changing Icons
-    const apiWeather = apiData.weather;
+    const apiWeather = apiData.weather[0].icon;
     setIcon(apiWeather);
 
     let currentCity = apiData.name;
