@@ -14,6 +14,7 @@ const visibilityElement = document.querySelector("#visibility");
 const windElement = document.querySelector("#wind");
 const dateTimeElement = document.querySelector("#date-time");
 const iconElement = document.querySelector("#icon");
+
 const inputFormElement = document.querySelector("#input-form");
 const inputSearchElement = document.querySelector("#input-search");
 const forecastElement = document.querySelector("#forecast");
@@ -39,13 +40,23 @@ function formatDate(date) {
     return `${currentDay}, ${currentDate} ${currentMonth} <i class="far fa-clock"></i> ${hours}:${minutes}`;
 }
 
+function formatDay(timeStamp) {
+    let date = new Date(timeStamp * 1000);
+    const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    let day = weekDays[date.getDay()];
+
+    return day;
+}
+
 function setTimeZone(response) {
     let utcTime = new Date();
     let localTime = new Date(utcTime.getTime() + response * 1000);
     dateTimeElement.innerHTML = formatDate(localTime);
 }
 
-function setIcon(dataApi) {
+function setIcon(dataApi, description) {
+
+
     const iconApi = dataApi;
     const iconMap = {
         '01d': 'sun.png',
@@ -69,40 +80,51 @@ function setIcon(dataApi) {
     };
 
     iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
-    iconElement.setAttribute("alt", dataApi[0].description);
-
-}
-
-function formatDay(timeStamp) {
-    let date = new Date(timeStamp * 1000);
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-    let day = days[date.getDay()];
-
-    return day;
+    iconElement.setAttribute("alt", description);
 }
 
 function displayForecast(response) {
 
     let forecast = response.data.daily;
-    console.log(forecast)
     let forecastHtml = '<div class="row">';
-    console.log(forecast[0].weather[0].icon)
 
     forecast.forEach(function (forecastDay, index) {
+
         if (index < 6 && index !== 0) {
+            const iconMap = {
+                '01d': 'sun.png',
+                '01n': 'night.png',
+                '02d': 'cloudy.png',
+                '02n': 'cloud-night.png',
+                '03d': 'cloud.png',
+                '03n': 'cloud.png',
+                '04d': 'broken-clouds.png',
+                '04n': 'broken-clouds.png',
+                '09d': 'rain.png',
+                '09n': 'rain.png',
+                '10d': 'rainy.png',
+                '10n': 'rainy.png',
+                '11d': 'storm.png',
+                '11n': 'storm.png',
+                '13d': 'snowy.png',
+                '13n': 'snowy.png',
+                '50d': 'mist.png',
+                '50n': 'mist.png',
+            };
+            
             forecastHtml = forecastHtml + `
                             <div class="col">
                                 <div class="weather-forecast-day m-1">${formatDay(forecastDay.dt)}</div>
-                                <img src="images/cloudy.png" alt="" class="weather-forecast-icon m-1">
-                                
+                                <img src="images/${iconMap[forecast[index].weather[0].icon]}" alt="${forecast[index].weather[0].description}" class="weather-forecast-icon m-1" id="icon-forecast">
                                 <div class="weather-forecast-temperature m-1">
                                 <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>${Math.round(forecastDay.temp.max)}°</span>
                                 <span class="forecast-temperature-min"><i class="fas fa-arrow-circle-down"></i>${Math.round(forecastDay.temp.min)}°</span>
                                 </div>
                             </div>`;
         }
-
     })
+
+
     forecastHtml = forecastHtml + `</div>`;
     forecastElement.innerHTML = forecastHtml;
 }
@@ -119,18 +141,18 @@ function getForecast(coordinates) {
 function displayTemperature(response) {
     const apiData = response.data;
     const apiMain = apiData.main;
-    // Changing Icons
-    const apiWeather = apiData.weather[0].icon;
-    setIcon(apiWeather);
-
     let currentCity = apiData.name;
     let currentCountry = apiData.sys.country;
     celsiusTemperature = Math.round(apiMain.temp);
+    // Changing Icons
     let currentDescription = apiData.weather[0].description;
+    const apiWeather = apiData.weather[0].icon;
+    setIcon(apiWeather, currentDescription);
+
     let currentHumidity = apiMain.humidity;
     let currentVisibility = (apiData.visibility) / 1000;
-    currentFeelsLike = Math.round(apiMain.feels_like);
     let currentWind = Math.round(apiData.wind.speed);
+    currentFeelsLike = Math.round(apiMain.feels_like);
     currentMaxTemperature = Math.round(apiMain.temp_max);
     currentMinTemperature = Math.round(apiMain.temp_min);
     // Applying Timezone
@@ -150,6 +172,11 @@ function displayTemperature(response) {
     getForecast(apiData.coord);
 }
 
+function getUnit() {
+    let celsiusUnit = "metric";
+    return celsiusUnit;
+}
+
 function updateCity(cityName) {
     let unit = getUnit();
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
@@ -161,10 +188,6 @@ function handleSubmit(event) {
     let searchInput = inputSearchElement.value.trim();
 
     updateCity(searchInput);
-}
-
-function getUnit() {
-    return "metric";
 }
 
 function handlePosition(position) {
@@ -192,4 +215,5 @@ buttonSearch.addEventListener("click", handleSubmit);
 buttonCurrent.addEventListener("click", currentPosition);
 
 
-updateCity("recife");
+updateCity("dublin city");
+currentPosition();
