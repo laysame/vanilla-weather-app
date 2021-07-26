@@ -1,9 +1,12 @@
 'use strict';
 const apiKey = "718938e8a3e4822470de1037fd72347a";
+const unit = "metric";
+
 let celsiusTemperature = null;
 let currentFeelsLike = null;
 let currentMaxTemperature = null;
 let currentMinTemperature = null;
+
 const temperatureElement = document.querySelector("#temperature");
 const feelsLikeElement = document.querySelector("#feels-like");
 const maxMinTemperatureElement = document.querySelector("#high-low-temp");
@@ -14,7 +17,8 @@ const visibilityElement = document.querySelector("#visibility");
 const windElement = document.querySelector("#wind");
 const dateTimeElement = document.querySelector("#date-time");
 const iconElement = document.querySelector("#icon");
-
+const buttonSearch = document.querySelector("#btn-search");
+const buttonCurrent = document.querySelector("#btn-current");
 const inputFormElement = document.querySelector("#input-form");
 const inputSearchElement = document.querySelector("#input-search");
 const forecastElement = document.querySelector("#forecast");
@@ -55,7 +59,6 @@ function setTimeZone(response) {
 }
 
 function setIcon(dataApi, description) {
-
 
     const iconApi = dataApi;
     const iconMap = {
@@ -111,10 +114,10 @@ function displayForecast(response) {
                 '50d': 'mist.png',
                 '50n': 'mist.png',
             };
-            
+
             forecastHtml = forecastHtml + `
                             <div class="col">
-                                <div class="weather-forecast-day m-1">${formatDay(forecastDay.dt)}</div>
+                                <div class="weather-forecast-day">${formatDay(forecastDay.dt)}</div>
                                 <img src="images/${iconMap[forecast[index].weather[0].icon]}" alt="${forecast[index].weather[0].description}" class="weather-forecast-icon m-1" id="icon-forecast">
                                 <div class="weather-forecast-temperature m-1">
                                 <span class="forecast-temperature-max"><i class="fas fa-arrow-circle-up"></i>${Math.round(forecastDay.temp.max)}°</span>
@@ -130,7 +133,6 @@ function displayForecast(response) {
 }
 
 function getForecast(coordinates) {
-    let unit = getUnit();
     const latitudeForecast = coordinates.lat;
     const longitudeForecast = coordinates.lon;
     const forecastApiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitudeForecast}&lon=${longitudeForecast}&appid=${apiKey}&units=${unit}`;
@@ -139,14 +141,14 @@ function getForecast(coordinates) {
 }
 
 function displayTemperature(response) {
-    const apiData = response.data;
-    const apiMain = apiData.main;
+    let apiData = response.data;
+    let apiMain = apiData.main;
     let currentCity = apiData.name;
     let currentCountry = apiData.sys.country;
     celsiusTemperature = Math.round(apiMain.temp);
     // Changing Icons
     let currentDescription = apiData.weather[0].description;
-    const apiWeather = apiData.weather[0].icon;
+    let apiWeather = apiData.weather[0].icon;
     setIcon(apiWeather, currentDescription);
 
     let currentHumidity = apiMain.humidity;
@@ -156,29 +158,23 @@ function displayTemperature(response) {
     currentMaxTemperature = Math.round(apiMain.temp_max);
     currentMinTemperature = Math.round(apiMain.temp_min);
     // Applying Timezone
-    const timeZoneAPI = apiData.timezone;
+    let timeZoneAPI = apiData.timezone;
     setTimeZone(timeZoneAPI);
 
     cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
-    temperatureElement.innerHTML = `${celsiusTemperature}°`;
+    temperatureElement.innerHTML = `${celsiusTemperature}°C`;
     descriptionElement.innerHTML = currentDescription;
     humidityElement.innerHTML = `<strong>${currentHumidity}%</strong>`;
     visibilityElement.innerHTML = `<strong> ${currentVisibility}km </strong>`;
-    feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°</strong>`;
+    feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°C</strong>`;
     windElement.innerHTML = `<strong>${currentWind}km/H</strong>`;
-    maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}° <i class="fas fa-arrow-circle-down"></i>
-    Night ${currentMinTemperature}°`;
+    maxMinTemperatureElement.innerHTML = `<i class="fas fa-arrow-circle-up"></i> Day ${currentMaxTemperature}°C <i class="fas fa-arrow-circle-down"></i>
+    Night ${currentMinTemperature}°C`;
 
     getForecast(apiData.coord);
 }
 
-function getUnit() {
-    let celsiusUnit = "metric";
-    return celsiusUnit;
-}
-
 function updateCity(cityName) {
-    let unit = getUnit();
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
     axios.get(apiUrl).then(displayTemperature);
 }
@@ -193,7 +189,6 @@ function handleSubmit(event) {
 function handlePosition(position) {
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
-    let unit = getUnit();
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
     axios.get(url).then(displayTemperature);
 }
@@ -202,12 +197,6 @@ function currentPosition(position) {
     position.preventDefault();
     navigator.geolocation.getCurrentPosition(handlePosition);
 }
-
-
-const buttonSearch = document.querySelector("#btn-search");
-const buttonCurrent = document.querySelector("#btn-current");
-const fahrenheitButton = document.querySelector("#fahrenheit-btn");
-const celsiusButton = document.querySelector("#celsius-btn");
 
 // Events listener
 inputFormElement.addEventListener("submit", handleSubmit);
