@@ -173,5 +173,4 @@ inputFormElement.addEventListener("submit", handleSubmit);
 buttonSearch.addEventListener("click", handleSubmit);
 buttonCurrent.addEventListener("click", currentPosition);
 
-
 updateCity("dublin city");
