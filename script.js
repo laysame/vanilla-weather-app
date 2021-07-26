@@ -2,6 +2,27 @@
 const apiKey = "718938e8a3e4822470de1037fd72347a";
 const unit = "metric";
 
+const iconMap = {
+    '01d': 'sun.png',
+    '01n': 'night.png',
+    '02d': 'cloudy.png',
+    '02n': 'cloud-night.png',
+    '03d': 'cloud.png',
+    '03n': 'cloud.png',
+    '04d': 'broken-clouds.png',
+    '04n': 'broken-clouds.png',
+    '09d': 'rain.png',
+    '09n': 'rain.png',
+    '10d': 'rainy.png',
+    '10n': 'rainy.png',
+    '11d': 'storm.png',
+    '11n': 'storm.png',
+    '13d': 'snowy.png',
+    '13n': 'snowy.png',
+    '50d': 'mist.png',
+    '50n': 'mist.png',
+};
+
 let temperature = null;
 let currentFeelsLike = null;
 let currentMaxTemperature = null;
@@ -57,60 +78,14 @@ function setTimeZone(response) {
     dateTimeElement.innerHTML = formatDate(localTime);
 }
 
-function setIcon(dataApi, description) {
-
-    const iconApi = dataApi;
-    const iconMap = {
-        '01d': 'sun.png',
-        '01n': 'night.png',
-        '02d': 'cloudy.png',
-        '02n': 'cloud-night.png',
-        '03d': 'cloud.png',
-        '03n': 'cloud.png',
-        '04d': 'broken-clouds.png',
-        '04n': 'broken-clouds.png',
-        '09d': 'rain.png',
-        '09n': 'rain.png',
-        '10d': 'rainy.png',
-        '10n': 'rainy.png',
-        '11d': 'storm.png',
-        '11n': 'storm.png',
-        '13d': 'snowy.png',
-        '13n': 'snowy.png',
-        '50d': 'mist.png',
-        '50n': 'mist.png',
-    };
-
-    iconElement.setAttribute("src", `images/${iconMap[iconApi]}`); //Changing attribute "src" to another value
+function setCurrentWeatherIcon(iconName, description) {
+    iconElement.setAttribute("src", `images/${iconMap[iconName]}`); //Changing attribute "src" to another value
     iconElement.setAttribute("alt", description);
 }
 
 function displayForecast(response) {
-
     let forecast = response.data.daily;
     let forecastHtml = '<div class="row">';
-
-    const iconMap = {
-        '01d': 'sun.png',
-        '01n': 'night.png',
-        '02d': 'cloudy.png',
-        '02n': 'cloud-night.png',
-        '03d': 'cloud.png',
-        '03n': 'cloud.png',
-        '04d': 'broken-clouds.png',
-        '04n': 'broken-clouds.png',
-        '09d': 'rain.png',
-        '09n': 'rain.png',
-        '10d': 'rainy.png',
-        '10n': 'rainy.png',
-        '11d': 'storm.png',
-        '11n': 'storm.png',
-        '13d': 'snowy.png',
-        '13n': 'snowy.png',
-        '50d': 'mist.png',
-        '50n': 'mist.png',
-    };
-
     let forecastDay;
 
     for (let index = 1; index < 6; index++) {
@@ -125,7 +100,7 @@ function displayForecast(response) {
                 </div>
             </div>`;
     }
-    
+
     forecastHtml = forecastHtml + `</div>`;
     forecastElement.innerHTML = forecastHtml;
 }
@@ -138,16 +113,14 @@ function getForecast(coordinates) {
     axios.get(forecastApiUrl).then(displayForecast);
 }
 
-function displayTemperature(response) {
+function displayCurrentWeather(response) {
     let apiData = response.data;
     let apiMain = apiData.main;
     let currentCity = apiData.name;
     let currentCountry = apiData.sys.country;
     temperature = Math.round(apiMain.temp);
-    // Changing Icons
-    let currentDescription = apiData.weather[0].description;
-    let apiWeather = apiData.weather[0].icon;
-    setIcon(apiWeather, currentDescription);
+
+    setCurrentWeatherIcon(apiData.weather[0].icon, apiData.weather[0].description);
 
     let currentHumidity = apiMain.humidity;
     let currentVisibility = (apiData.visibility) / 1000;
@@ -161,7 +134,7 @@ function displayTemperature(response) {
 
     cityElement.innerHTML = `${currentCity}, ${currentCountry}`;
     temperatureElement.innerHTML = `${temperature}°C`;
-    descriptionElement.innerHTML = currentDescription;
+    descriptionElement.innerHTML = apiData.weather[0].description;
     humidityElement.innerHTML = `<strong>${currentHumidity}%</strong>`;
     visibilityElement.innerHTML = `<strong> ${currentVisibility}km </strong>`;
     feelsLikeElement.innerHTML = `<strong>${currentFeelsLike}°C</strong>`;
@@ -174,7 +147,7 @@ function displayTemperature(response) {
 
 function updateCity(cityName) {
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},&appid=${apiKey}&units=${unit}`;
-    axios.get(apiUrl).then(displayTemperature);
+    axios.get(apiUrl).then(displayCurrentWeather);
 }
 
 function handleSubmit(event) {
@@ -188,11 +161,10 @@ function handlePosition(position) {
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=${unit}`;
-    axios.get(url).then(displayTemperature);
+    axios.get(url).then(displayCurrentWeather);
 }
 
-function currentPosition(position) {
-    position.preventDefault();
+function currentPosition() {
     navigator.geolocation.getCurrentPosition(handlePosition);
 }
 
@@ -203,4 +175,3 @@ buttonCurrent.addEventListener("click", currentPosition);
 
 
 updateCity("dublin city");
-currentPosition();
